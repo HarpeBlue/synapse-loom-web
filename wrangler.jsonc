@@ -1,0 +1,10 @@
+// Cloudflare Workers config: serve this repo as a pure static site
+// (no Worker code — just the assets, free and unlimited).
+{
+  "name": "synapse-loom-web",
+  "compatibility_date": "2026-07-06",
+  "assets": {
+    "directory": "./",
+    "not_found_handling": "404-page"
+  }
+}
