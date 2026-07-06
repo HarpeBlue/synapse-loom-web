@@ -5,21 +5,25 @@
 const DIST_REPO = "HarpeBlue/synapse-loom-dist";
 const RELEASES_LATEST = `https://github.com/${DIST_REPO}/releases/latest`;
 
-// Map a download filename to a human OS label. Order matters: the first match wins.
-const OS_MATCHERS = [
-  { os: "macOS", test: (n) => /\.dmg$/i.test(n) },
-  { os: "macOS", test: (n) => /\.app\.tar\.gz$/i.test(n) },
-  { os: "Windows", test: (n) => /\.(exe|msi)$/i.test(n) },
-  { os: "Linux", test: (n) => /\.appimage$/i.test(n) },
-  { os: "Linux", test: (n) => /\.(deb|rpm)$/i.test(n) },
+// Map installer filenames to download variants. First match wins per asset.
+// Updater artifacts (.app.tar.gz, .sig) and metadata (latest.json) match
+// nothing on purpose — they're for the in-app updater, not for people.
+// macOS ships two .dmg (one per CPU): keep them apart so an Intel Mac user
+// doesn't get an Apple Silicon build that won't launch.
+const VARIANTS = [
+  { os: "macOS", label: "macOS (Apple Silicon)", test: (n) => /\.dmg$/i.test(n) && /(aarch64|arm64)/i.test(n) },
+  { os: "macOS", label: "macOS (Intel)", test: (n) => /\.dmg$/i.test(n) && /(x64|x86_64|intel)/i.test(n) },
+  { os: "macOS", label: "macOS", test: (n) => /\.dmg$/i.test(n) },
+  { os: "Windows", label: "Windows", test: (n) => /\.exe$/i.test(n) },
+  { os: "Windows", label: "Windows (.msi)", test: (n) => /\.msi$/i.test(n) },
+  { os: "Linux", label: "Linux (AppImage)", test: (n) => /\.appimage$/i.test(n) },
+  { os: "Linux", label: "Linux (.deb)", test: (n) => /\.deb$/i.test(n) },
+  { os: "Linux", label: "Linux (.rpm)", test: (n) => /\.rpm$/i.test(n) },
 ];
 
-function classify(name) {
-  for (const m of OS_MATCHERS) if (m.test(name)) return m.os;
-  return null;
-}
-
-// Best guess at the visitor's OS for the primary button.
+// Best guess at the visitor's OS for the primary button. Browsers don't
+// expose the CPU reliably, so on macOS we default to Apple Silicon and let
+// the "All platforms" list cover Intel.
 function detectOS() {
   const platform = (navigator.userAgentData && navigator.userAgentData.platform) || "";
   const ua = navigator.userAgent || "";
@@ -28,16 +32,6 @@ function detectOS() {
   if (hay.includes("win")) return "Windows";
   if (hay.includes("linux") || hay.includes("x11")) return "Linux";
   return null;
-}
-
-// Prefer the friendliest installer when an OS exposes several.
-function pickPreferred(assets) {
-  const order = [/\.dmg$/i, /\.exe$/i, /\.msi$/i, /\.appimage$/i, /\.deb$/i, /\.rpm$/i];
-  for (const re of order) {
-    const hit = assets.find((a) => re.test(a.name));
-    if (hit) return hit;
-  }
-  return assets[0];
 }
 
 function setFallback() {
@@ -57,41 +51,45 @@ async function init() {
     if (!res.ok) throw new Error(`GitHub API ${res.status}`);
     const release = await res.json();
 
-    const downloads = (release.assets || []).filter((a) => classify(a.name));
-    if (downloads.length === 0) throw new Error("no installers in latest release");
-
-    // Group assets by OS.
-    const byOS = { Linux: [], Windows: [], macOS: [] };
-    for (const a of downloads) byOS[classify(a.name)].push(a);
+    // One asset per variant, in VARIANTS order (order encodes preference).
+    const found = [];
+    const taken = new Set();
+    for (const v of VARIANTS) {
+      const asset = (release.assets || []).find((a) => !taken.has(a.name) && v.test(a.name));
+      if (asset) {
+        taken.add(asset.name);
+        found.push({ ...v, asset });
+      }
+    }
+    if (found.length === 0) throw new Error("no installers in latest release");
 
     const version = release.tag_name || release.name || "";
 
-    // Primary button: the detected OS if we have a build for it, else fall back.
+    // Primary button: first variant matching the detected OS (VARIANTS order
+    // already prefers Apple Silicon, .exe over .msi, AppImage over .deb).
     const btn = document.getElementById("primary-download");
     const meta = document.getElementById("download-meta");
-    if (detected && byOS[detected] && byOS[detected].length) {
-      const asset = pickPreferred(byOS[detected]);
-      btn.href = asset.browser_download_url;
-      btn.textContent = `Download for ${detected}`;
-      meta.textContent = version ? `${version} · ${asset.name}` : asset.name;
+    const primary = detected && found.find((v) => v.os === detected);
+    if (primary) {
+      btn.href = primary.asset.browser_download_url;
+      btn.textContent = `Download for ${primary.label}`;
+      meta.textContent = version ? `${version} · ${primary.asset.name}` : primary.asset.name;
     } else {
       btn.href = RELEASES_LATEST;
       btn.textContent = "Download";
       meta.textContent = version ? `Latest release ${version}` : "Latest release";
     }
 
-    // "All platforms" list: one line per OS, linking the preferred installer.
+    // "All platforms" list: every variant we found, labeled.
     const list = document.getElementById("all-platforms-list");
     list.innerHTML = "";
-    for (const os of ["Linux", "macOS", "Windows"]) {
-      if (!byOS[os].length) continue;
-      const asset = pickPreferred(byOS[os]);
+    for (const v of found) {
       const li = document.createElement("li");
       const a = document.createElement("a");
-      a.href = asset.browser_download_url;
+      a.href = v.asset.browser_download_url;
       a.target = "_blank";
       a.rel = "noopener";
-      a.textContent = os;
+      a.textContent = v.label;
       li.appendChild(a);
       list.appendChild(li);
     }

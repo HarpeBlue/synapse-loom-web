@@ -43,6 +43,22 @@ unauthenticated rate limit), the button gracefully falls back to the
    - **Build output directory:** `/` (the repo root)
 4. **Save and Deploy.** The site goes live at `https://<project>.pages.dev`.
 
+### Alternative: GitHub Pages
+
+Also free, one provider fewer. The repo must be **public** on the free plan
+(fine — the app's source lives in a different, private repo):
+
+1. Repo → **Settings → Pages** → Source: *Deploy from a branch* → `main`, `/ (root)`.
+2. Live at `https://harpeblue.github.io/synapse-loom-web/`.
+3. Custom domain: add `synapseloom.app` in the Pages settings (this commits a
+   `CNAME` file) and point DNS `A` records at GitHub's IPs
+   (`185.199.108.153` … `185.199.111.153`). Tick **Enforce HTTPS** once the
+   certificate is issued — required, since `.app` is HSTS-preloaded.
+
+Cloudflare Pages is still the smoother path if you buy the domain at
+Cloudflare Registrar (instant DNS + TLS, plus redirect rules for the optional
+updater endpoint below).
+
 ### Custom domain `synapseloom.app`
 
 1. Buy `synapseloom.app` (Cloudflare Registrar sells `.app` at cost, ~$14/yr).
