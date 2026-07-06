@@ -1,0 +1,190 @@
+:root {
+  /* Brand palette — mirrors the app icon (teal on navy). */
+  --navy-900: #0a1119;
+  --navy-800: #0e1a2b;
+  --navy-700: #132238;
+  --teal-400: #2dd4bf;
+  --teal-500: #22b8cf;
+  --text: #e8eef5;
+  --text-dim: #9fb0c3;
+  --border: rgba(45, 212, 191, 0.18);
+  --radius: 14px;
+  --maxw: 980px;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  color: var(--text);
+  background:
+    radial-gradient(1100px 600px at 50% -8%, rgba(45, 212, 191, 0.12), transparent 60%),
+    linear-gradient(160deg, var(--navy-800), var(--navy-900));
+  background-attachment: fixed;
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--teal-400); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ---- header ---- */
+.site-header {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 1.4rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brand { display: flex; align-items: center; gap: 0.6rem; color: var(--text); font-weight: 700; }
+.brand:hover { text-decoration: none; }
+.brand-mark { display: block; }
+.brand-name { font-size: 1.05rem; letter-spacing: 0.2px; }
+.site-nav a { color: var(--text-dim); margin-left: 1.4rem; font-size: 0.95rem; }
+.site-nav a:hover { color: var(--text); text-decoration: none; }
+
+/* ---- hero ---- */
+.hero {
+  max-width: 1100px;
+  margin: 2rem auto 4rem;
+  padding: 2rem 1.5rem 0;
+  text-align: center;
+}
+.hero-glyph svg {
+  width: 132px;
+  height: 132px;
+  filter: drop-shadow(0 8px 28px rgba(45, 212, 191, 0.28));
+}
+.hero-title {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  margin: 1rem 0 0.6rem;
+  letter-spacing: -0.02em;
+  background: linear-gradient(120deg, #fff, var(--teal-400));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero-tagline {
+  font-size: 1.15rem;
+  color: var(--text-dim);
+  max-width: 46ch;
+  margin: 0 auto 2rem;
+}
+.beta-pill {
+  display: inline-block;
+  margin: 1.2rem 0 0;
+  padding: 0.28rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(45, 212, 191, 0.08);
+  color: var(--teal-400);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.hero-shot {
+  margin: 3.2rem auto 0;
+  max-width: 1020px;
+  padding: 0 1rem;
+}
+.hero-shot img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+              0 0 0 1px rgba(45, 212, 191, 0.06);
+}
+
+/* ---- download ---- */
+.download { margin-top: 1.5rem; }
+.btn {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 0.85rem 2rem;
+  border-radius: var(--radius);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+.btn:hover { text-decoration: none; }
+.btn-primary {
+  color: var(--navy-900);
+  background: linear-gradient(120deg, var(--teal-400), var(--teal-500));
+  box-shadow: 0 10px 30px rgba(45, 212, 191, 0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); filter: brightness(1.05); }
+.download-meta {
+  margin: 0.9rem 0 0;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+.all-platforms {
+  margin-top: 1.2rem;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+.all-platforms-label { margin-right: 0.5rem; }
+.download-note {
+  margin: 0.7rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  opacity: 0.85;
+}
+.all-platforms ul {
+  list-style: none;
+  display: inline-flex;
+  gap: 1.1rem;
+  padding: 0;
+  margin: 0;
+}
+
+/* ---- features ---- */
+.features {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  display: grid;
+  /* 280px floor → exactly 3 columns at the 980px max width, so the six
+     cards land in a clean 2×3 with no orphan. */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+.feature {
+  background: rgba(19, 34, 56, 0.6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.6rem 1.4rem;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.feature:hover { transform: translateY(-3px); border-color: rgba(45, 212, 191, 0.4); }
+.feature-icon { font-size: 1.6rem; margin-bottom: 0.6rem; }
+.feature h2 { font-size: 1.1rem; margin: 0 0 0.4rem; }
+.feature p { margin: 0; color: var(--text-dim); font-size: 0.95rem; }
+
+/* ---- footer ---- */
+.site-footer {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--border);
+}
+.site-footer a { color: var(--text-dim); }
+.site-footer a:hover { color: var(--teal-400); }
+
+@media (max-width: 520px) {
+  .all-platforms ul { gap: 0.8rem; }
+  .site-nav a:first-child { display: none; }
+}

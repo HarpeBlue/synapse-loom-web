@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Synapse Loom — local-first notes & spaced repetition</title>
+  <meta name="description" content="Synapse Loom is a local-first desktop app for note-taking and spaced repetition. Your notes stay on your machine. Free, open download." />
+
+  <!-- Open Graph / social — scrapers need an ABSOLUTE URL and a raster image
+       (SVG previews are ignored by Twitter/WhatsApp/Facebook). -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Synapse Loom" />
+  <meta property="og:description" content="Local-first notes & spaced repetition. Your knowledge graph, on your machine." />
+  <meta property="og:image" content="https://synapseloom.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:url" content="https://synapseloom.app" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">
+      <img class="brand-mark" src="assets/favicon.svg" width="32" height="32" alt="" />
+      <span class="brand-name">Synapse&nbsp;Loom</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#features">Features</a>
+      <a href="https://github.com/HarpeBlue/synapse-loom-dist/releases" target="_blank" rel="noopener">Releases</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-glyph" aria-hidden="true">
+        <!-- Brand glyph: knowledge graph (mirrors the app icon) -->
+        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="teal" x1="300" y1="280" x2="640" y2="740" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#2DD4BF"/>
+              <stop offset="1" stop-color="#22B8CF"/>
+            </linearGradient>
+          </defs>
+          <g stroke="url(#teal)" stroke-width="26" stroke-linecap="round" opacity="0.55">
+            <line x1="512" y1="486" x2="338" y2="330"/>
+            <line x1="512" y1="486" x2="690" y2="346"/>
+            <line x1="512" y1="486" x2="566" y2="706"/>
+          </g>
+          <g fill="#0E1A2B" stroke="url(#teal)" stroke-width="22">
+            <circle cx="338" cy="330" r="58"/>
+            <circle cx="690" cy="346" r="52"/>
+            <circle cx="566" cy="706" r="62"/>
+          </g>
+          <circle cx="512" cy="486" r="92" fill="url(#teal)"/>
+          <circle cx="512" cy="486" r="34" fill="#0A1119" opacity="0.9"/>
+        </svg>
+      </div>
+
+      <p class="beta-pill">Public beta</p>
+      <h1 class="hero-title">Synapse&nbsp;Loom</h1>
+      <p class="hero-tagline">
+        A local-first desktop app for note-taking and spaced repetition.
+        Weave your notes into a knowledge graph — and let it teach you back.
+      </p>
+
+      <div class="download">
+        <a id="primary-download" class="btn btn-primary" href="https://github.com/HarpeBlue/synapse-loom-dist/releases/latest" target="_blank" rel="noopener">
+          Download
+        </a>
+        <p id="download-meta" class="download-meta">Detecting your platform…</p>
+        <div id="all-platforms" class="all-platforms" hidden>
+          <span class="all-platforms-label">All platforms:</span>
+          <ul id="all-platforms-list"></ul>
+        </div>
+        <p class="download-note">Free · signed auto-updates on Linux &amp; Windows</p>
+      </div>
+
+      <figure class="hero-shot">
+        <img
+          src="assets/screenshot-app.png"
+          width="1360" height="850"
+          alt="Synapse Loom: a note about Pi with rendered math, tags, wikilinks and a flashcard, next to the note library"
+          loading="eager"
+        />
+      </figure>
+    </section>
+
+    <section id="features" class="features">
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">🎓</div>
+        <h2>Coming from Anki?</h2>
+        <p>Import your .apkg decks — cards keep their ease, interval and due date, images included. No starting over.</p>
+      </article>
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">🧠</div>
+        <h2>Repetition that adapts</h2>
+        <p>Cloze deletions and Q/A become flashcards on save. The queue puts what you're about to forget first, failed cards return in-session, and you can type answers for real recall.</p>
+      </article>
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">🖼️</div>
+        <h2>Image occlusion</h2>
+        <p>Cover parts of a diagram, map or anatomy figure — every box becomes a card that hides exactly that region.</p>
+      </article>
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">🔗</div>
+        <h2>Linked thinking</h2>
+        <p>Wikilinks and backlinks connect ideas into a graph. Daily notes, math (KaTeX), and live Markdown preview come built in.</p>
+      </article>
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">📈</div>
+        <h2>Know your progress</h2>
+        <p>Day streak, daily goal, activity heatmap and a weekly summary of what you consolidated — plus leech management for the cards that fight back.</p>
+      </article>
+      <article class="feature">
+        <div class="feature-icon" aria-hidden="true">🔒</div>
+        <h2>Local-first</h2>
+        <p>Your notes live in a SQLite database on your machine. No account, no cloud, no lock-in — export to plain Markdown anytime. Six themes, keyboard-first.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Synapse Loom · built by <a href="https://harpeblue.dev" target="_blank" rel="noopener">HarpeBlue</a> ·
+      <a href="https://github.com/HarpeBlue/synapse-loom-dist/releases" target="_blank" rel="noopener">all releases</a>
+    </p>
+  </footer>
+
+  <script src="assets/app.js" defer></script>
+</body>
+</html>
